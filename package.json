@@ -1,0 +1,185 @@
+{
+  "name": "i18n-search",
+  "displayName": "i18n Search",
+  "description": "Search locale values and jump directly to code usages. Skip the two-step lookup — go from translation text to source code in one step.",
+  "version": "0.1.0",
+  "publisher": "sjhong98",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other",
+    "Programming Languages"
+  ],
+  "keywords": [
+    "i18n",
+    "internationalization",
+    "locale",
+    "translation",
+    "i18next",
+    "next-i18next",
+    "search",
+    "react-intl"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "i18n-search.searchByValue",
+        "title": "i18n Search: Search by Locale Value",
+        "icon": "$(search)"
+      },
+      {
+        "command": "i18n-search.searchByKey",
+        "title": "i18n Search: Search by Key"
+      },
+      {
+        "command": "i18n-search.reindex",
+        "title": "i18n Search: Reindex All Files"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "i18n-search.searchByValue",
+        "key": "ctrl+shift+i",
+        "mac": "cmd+shift+i"
+      }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "i18nSearchResults",
+          "name": "i18n Search Results",
+          "when": "i18nSearch.hasResults"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "i18n Search",
+      "properties": {
+        "i18nSearch.localeFilePaths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "**/locales/**/*.json",
+            "**/locales/**/*.yml",
+            "**/locales/**/*.yaml"
+          ],
+          "markdownDescription": "Glob patterns for locale files to index."
+        },
+        "i18nSearch.sourceFilePaths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "**/*.{ts,tsx,js,jsx,vue,svelte}"
+          ],
+          "markdownDescription": "Glob patterns for source code files to scan for translation function usages."
+        },
+        "i18nSearch.excludePatterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "**/node_modules/**",
+            "**/dist/**",
+            "**/build/**",
+            "**/.next/**"
+          ],
+          "markdownDescription": "Glob patterns to exclude from scanning."
+        },
+        "i18nSearch.translationCallPatterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "\\bt\\s*\\(\\s*['\"]([^'\"]+)['\"]",
+            "\\bi18next\\.t\\s*\\(\\s*['\"]([^'\"]+)['\"]",
+            "\\bi18n\\.t\\s*\\(\\s*['\"]([^'\"]+)['\"]",
+            "\\$t\\s*\\(\\s*['\"]([^'\"]+)['\"]"
+          ],
+          "markdownDescription": "Regex patterns to detect translation function calls in code. The first capture group should match the key string."
+        },
+        "i18nSearch.namespaceDetectionPatterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "useTranslation\\s*\\(\\s*['\"]([^'\"]+)['\"]",
+            "getFixedT\\s*\\(\\s*[^,]+,\\s*['\"]([^'\"]+)['\"]"
+          ],
+          "markdownDescription": "Regex patterns to detect namespace declarations (e.g., `useTranslation('common')`). First capture group = namespace."
+        },
+        "i18nSearch.namespaceSeparator": {
+          "type": "string",
+          "default": ":",
+          "markdownDescription": "Separator between namespace and key in translation calls. Default: `:`"
+        },
+        "i18nSearch.keyPathSeparator": {
+          "type": "string",
+          "default": ".",
+          "markdownDescription": "Separator for nested key paths. Default: `.`"
+        },
+        "i18nSearch.primaryLanguage": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Primary language code to search in (e.g., `ko`, `en`). If empty, searches all languages."
+        },
+        "i18nSearch.searchMode": {
+          "type": "string",
+          "enum": [
+            "contains",
+            "fuzzy",
+            "exact"
+          ],
+          "default": "contains",
+          "markdownDescription": "Default search matching mode."
+        },
+        "i18nSearch.maxSearchResults": {
+          "type": "number",
+          "default": 50,
+          "minimum": 10,
+          "maximum": 500,
+          "markdownDescription": "Maximum number of search results to display."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "npm run check-types && node esbuild.mjs",
+    "check-types": "tsc --noEmit",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.mjs --watch",
+    "watch:tsc": "tsc --noEmit --watch --preserveWatchOutput",
+    "package": "node esbuild.mjs --production",
+    "lint": "eslint src/",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest",
+    "pretest": "npm run compile"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^20.0.0",
+    "@vscode/vsce": "^3.0.0",
+    "esbuild": "^0.21.0",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.5.0"
+  },
+  "dependencies": {
+    "yaml": "^2.4.0"
+  }
+}
