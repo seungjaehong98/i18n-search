@@ -50,11 +50,11 @@ code --install-extension i18n-search-0.1.0.vsix
 
 ### 2. 사용
 
-| 동작 | 단축키 |
+| 동작 | 단축키    |
 |------|--------|
 | 로케일 값으로 검색 | `Cmd+Shift+I` (Mac) / `Ctrl+Shift+I` (Win/Linux) |
-| 로케일 키로 검색 | Command Palette → `i18n Search: Search by Key` |
-| 수동 재인덱싱 | Command Palette → `i18n Search: Reindex All Files` |
+| 로케일 키로 검색  | Command Palette → `i18n Search: Search by Key` |
+| 수동 재인덱싱     | Command Palette → `i18n Search: Reindex All Files` |
 
 ### 3. 검색 흐름
 
@@ -65,11 +65,11 @@ Cmd+Shift+I 입력
     ↓
 매칭되는 로케일 항목 목록 표시
   ┌─────────────────────────────────────────────┐
-  │  비밀번호를 입력해 주세요.                      │
+  │  비밀번호를 입력해 주세요.                         │
   │  auth:password.changeCurrentPlaceholder [ko] │
   │  2 usages in code                            │
   ├─────────────────────────────────────────────┤
-  │  비밀번호를 입력하세요.                         │
+  │  비밀번호를 입력하세요.                            │
   │  auth:password.placeholder [ko]              │
   │  1 usage in code                             │
   └─────────────────────────────────────────────┘
